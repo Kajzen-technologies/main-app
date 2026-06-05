@@ -1,0 +1,26 @@
+{
+  "name": "admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 12361",
+    "build": "next build",
+    "start": "next start -p 12361"
+  },
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.344.0",
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^4.2.1",
+    "shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.5.0",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.60",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.3.3"
+  }
+}

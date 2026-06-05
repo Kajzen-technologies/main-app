@@ -1,0 +1,145 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserType {
+  ANONYMOUS
+  ADMIN
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  GOVERNMENT_VIEWER
+}
+
+model User {
+  id                String    @id @default(uuid())
+  type              UserType  @default(ANONYMOUS)
+  email             String?   @unique
+  phone             String?
+  name              String?
+  role              UserRole  @default(USER)
+  localUserId       String?   @unique
+  preferredLanguage String    @default("cs")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_REVIEW
+}
+
+enum PublicStatus {
+  OPEN
+  CLOSED
+  UNKNOWN
+}
+
+enum CrowdLevel {
+  LOW
+  MEDIUM
+  HIGH
+  UNKNOWN
+}
+
+model Marker {
+  id                     String             @id @default(uuid())
+  title                  String
+  description            String?
+  category               String
+  latitude               Float
+  longitude              Float
+  address                String?
+  publicStatus           PublicStatus       @default(UNKNOWN)
+  verificationStatus     VerificationStatus @default(PENDING)
+  hasElectricity         Boolean?
+  hasWater               Boolean?
+  hasInternet            Boolean?
+  crowdLevel             CrowdLevel         @default(UNKNOWN)
+  submittedByLocalUserId String?
+  approvedByAdminId      String?
+  lastVerifiedAt         DateTime?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  reports                MarkerReport[]
+}
+
+enum MarkerReportIssueType {
+  CLOSED
+  NO_ELECTRICITY
+  NO_WATER
+  NO_INTERNET
+  TOO_CROWDED
+  WRONG_LOCATION
+  OUTDATED_INFO
+  OTHER
+}
+
+model MarkerReport {
+  id             String                @id @default(uuid())
+  markerId       String
+  marker         Marker                @relation(fields: [markerId], references: [id], onDelete: Cascade)
+  localUserId    String
+  reportedStatus PublicStatus          @default(UNKNOWN)
+  hasElectricity Boolean?
+  hasWater       Boolean?
+  hasInternet    Boolean?
+  crowdLevel     CrowdLevel            @default(UNKNOWN)
+  issueType      MarkerReportIssueType
+  comment        String?
+  createdAt      DateTime              @default(now())
+}
+
+model Guide {
+  id             String               @id @default(uuid())
+  slug           String               @unique
+  category       String
+  priority       Int                  @default(0)
+  isPublished    Boolean              @default(false)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  translations   GuideTranslation[]
+  checklistItems GuideChecklistItem[]
+}
+
+model GuideTranslation {
+  id               String   @id @default(uuid())
+  guideId          String
+  guide            Guide    @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  language         String
+  title            String
+  shortDescription String
+  content          String   @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([guideId, language])
+}
+
+model GuideChecklistItem {
+  id        String   @id @default(uuid())
+  guideId   String
+  guide     Guide    @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  order     Int
+  textCs    String
+  textEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminSession {
+  id        String   @id @default(uuid())
+  email     String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
