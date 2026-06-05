@@ -30,11 +30,52 @@ app.get("/health", (_req, res) => {
   return res.json({ status: "healthy", timestamp: new Date().toISOString() });
 });
 
+import { prisma } from "./modules/database/prisma";
+
+// In-memory store for SOS signals for MVP dashboard/logging
+let sosSignals: any[] = [];
+
 // Mounting modules
 app.use("/admin/auth", adminAuthRouter);
 app.use("/markers", markersRouter);
 app.use("/markers", reportsRouter);
 app.use("/guides", guidesRouter);
+
+app.post("/emergency/sos", (req, res) => {
+  const { latitude, longitude, phone, name, localUserId } = req.body;
+  const newSignal = {
+    id: `sos_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    latitude,
+    longitude,
+    phone,
+    name,
+    localUserId,
+    createdAt: new Date().toISOString()
+  };
+  sosSignals.push(newSignal);
+  console.log(`[SOS Signal Received] User: ${name}, Phone: ${phone}, Coords: ${latitude}, ${longitude}`);
+  return res.json({ success: true, signal: newSignal });
+});
+
+app.get("/emergency/sos", (_req, res) => {
+  return res.json(sosSignals);
+});
+
+app.post("/users/volunteer", async (req, res) => {
+  const { name, phone, roles, zone, localUserId } = req.body;
+  try {
+    const user = await prisma.user.upsert({
+      where: { localUserId: localUserId || "anonymous" },
+      update: { name, phone },
+      create: { localUserId: localUserId || "anonymous", name, phone }
+    });
+    console.log(`[Volunteer registered] User: ${name}, Phone: ${phone}, Roles: ${roles?.join(", ")}, Zone: ${zone}`);
+    return res.json({ success: true, user });
+  } catch (err: any) {
+    console.error("Failed to register volunteer:", err);
+    return res.status(500).json({ error: "Internal Server Error", message: err.message });
+  }
+});
 
 app.use("/admin/markers", adminMarkersRouter);
 app.use("/admin/guides", adminGuidesRouter);

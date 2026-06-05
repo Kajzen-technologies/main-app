@@ -22,7 +22,7 @@ export const offlineQueue = {
     }
   },
 
-  enqueue(type: "CREATE_MARKER" | "CREATE_MARKER_REPORT", payload: any, localUserId: string): OfflineQueueItem {
+  enqueue(type: "CREATE_MARKER" | "CREATE_MARKER_REPORT" | "SEND_SOS" | "REGISTER_VOLUNTEER", payload: any, localUserId: string): OfflineQueueItem {
     const newItem: OfflineQueueItem = {
       id: `offline_action_${Math.random().toString(36).substring(2, 10)}`,
       type,

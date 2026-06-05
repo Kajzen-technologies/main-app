@@ -1,0 +1,148 @@
+.
+├── AGENTS.md
+├── Frontend
+│   └── test.txt
+├── LICENSE
+├── README.md
+├── ai-work-summary
+│   └── work-summary.md
+├── apps
+│   ├── admin
+│   │   ├── next-env.d.ts
+│   │   ├── next.config.js
+│   │   ├── package.json
+│   │   ├── src
+│   │   │   ├── app
+│   │   │   │   ├── globals.css
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── page.tsx
+│   │   │   └── components
+│   │   │       └── AdminAppClient.tsx
+│   │   └── tsconfig.json
+│   ├── mobile
+│   │   ├── App.tsx
+│   │   ├── babel.config.js
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   └── web
+│       ├── next-env.d.ts
+│       ├── next.config.js
+│       ├── package.json
+│       ├── src
+│       │   ├── app
+│       │   │   ├── globals.css
+│       │   │   ├── layout.tsx
+│       │   │   └── page.tsx
+│       │   ├── components
+│       │   │   └── MainAppClient.tsx
+│       │   ├── features
+│       │   │   ├── location
+│       │   │   │   └── useOptionalGeolocation.ts
+│       │   │   ├── offline
+│       │   │   │   ├── OfflineBanner.tsx
+│       │   │   │   ├── offlineQueue.ts
+│       │   │   │   ├── offlineStorage.ts
+│       │   │   │   ├── syncOfflineActions.ts
+│       │   │   │   └── useOfflineStatus.ts
+│       │   │   └── profile
+│       │   │       ├── profileStorage.ts
+│       │   │       └── useLocalProfile.ts
+│       │   └── lib
+│       │       └── translations
+│       │           ├── cs.ts
+│       │           └── en.ts
+│       └── tsconfig.json
+├── docker-compose.yml
+├── docs
+│   ├── api.md
+│   ├── architecture.md
+│   ├── database.md
+│   ├── decisions.md
+│   └── local-development.md
+├── package.json
+├── packages
+│   └── shared
+│       ├── package.json
+│       ├── src
+│       │   ├── anonymous-user
+│       │   │   ├── anonymousUser.types.ts
+│       │   │   ├── createAnonymousUser.ts
+│       │   │   └── getAnonymousUser.ts
+│       │   ├── emergency
+│       │   │   ├── emergencyAction.types.ts
+│       │   │   └── emergencyFilters.ts
+│       │   ├── guides
+│       │   │   ├── checklist.types.ts
+│       │   │   ├── guide.types.ts
+│       │   │   ├── guideCategory.constants.ts
+│       │   │   └── guideCategory.labels.ts
+│       │   ├── index.ts
+│       │   ├── maps
+│       │   │   ├── directionsUrl.ts
+│       │   │   └── mapProvider.types.ts
+│       │   ├── markers
+│       │   │   ├── distance.ts
+│       │   │   ├── marker.types.ts
+│       │   │   ├── marker.validation.ts
+│       │   │   ├── markerCategory.constants.ts
+│       │   │   ├── markerCategory.labels.ts
+│       │   │   ├── markerCategory.priority.ts
+│       │   │   └── sortMarkersForDisplay.ts
+│       │   ├── offline
+│       │   │   ├── cachedGuide.types.ts
+│       │   │   ├── cachedMarker.types.ts
+│       │   │   ├── offlineQueue.types.ts
+│       │   │   └── syncStatus.types.ts
+│       │   ├── profile
+│       │   │   ├── localUserProfile.types.ts
+│       │   │   └── profile.validation.ts
+│       │   └── search
+│       │       ├── markerSearch.ts
+│       │       ├── normalizeSearchText.ts
+│       │       └── search.types.ts
+│       └── tsconfig.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── prague-blackout-resilience-app-mvp-prompt.md
+├── services
+│   └── api
+│       ├── package.json
+│       ├── prisma
+│       │   ├── migrations
+│       │   │   ├── 20260605131612_init
+│       │   │   │   └── migration.sql
+│       │   │   └── migration_lock.toml
+│       │   ├── schema.prisma
+│       │   └── seed.ts
+│       ├── src
+│       │   ├── main.ts
+│       │   └── modules
+│       │       ├── admin-auth
+│       │       │   ├── admin-auth.controller.ts
+│       │       │   ├── admin-auth.service.ts
+│       │       │   ├── admin-session.types.ts
+│       │       │   └── require-admin.middleware.ts
+│       │       ├── analytics
+│       │       │   ├── analytics.controller.ts
+│       │       │   ├── analytics.repository.ts
+│       │       │   ├── analytics.service.ts
+│       │       │   └── analytics.types.ts
+│       │       ├── database
+│       │       │   └── prisma.ts
+│       │       ├── guides
+│       │       │   ├── guides.controller.ts
+│       │       │   ├── guides.repository.ts
+│       │       │   └── guides.service.ts
+│       │       ├── markers
+│       │       │   ├── marker-category.service.ts
+│       │       │   ├── markers.controller.ts
+│       │       │   ├── markers.repository.ts
+│       │       │   └── markers.service.ts
+│       │       └── reports
+│       │           ├── needs-review.service.ts
+│       │           ├── reports.controller.ts
+│       │           └── reports.service.ts
+│       └── tsconfig.json
+└── tree.txt
+
+44 directories, 102 files

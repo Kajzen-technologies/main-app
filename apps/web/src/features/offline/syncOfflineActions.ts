@@ -19,6 +19,10 @@ export async function syncOfflineActions(apiBaseUrl: string): Promise<{ successC
         const { markerId, ...reportPayload } = item.payload;
         url = `${apiBaseUrl}/markers/${markerId}/reports`;
         body = reportPayload;
+      } else if (item.type === "SEND_SOS") {
+        url = `${apiBaseUrl}/emergency/sos`;
+      } else if (item.type === "REGISTER_VOLUNTEER") {
+        url = `${apiBaseUrl}/users/volunteer`;
       }
 
       const res = await fetch(url, {

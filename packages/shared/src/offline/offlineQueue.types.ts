@@ -1,6 +1,6 @@
 export interface OfflineQueueItem {
   id: string;
-  type: "CREATE_MARKER" | "CREATE_MARKER_REPORT";
+  type: "CREATE_MARKER" | "CREATE_MARKER_REPORT" | "SEND_SOS" | "REGISTER_VOLUNTEER";
   payload: any;
   localUserId: string;
   createdAt: string;

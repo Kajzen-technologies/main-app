@@ -1,0 +1,481 @@
+/* ─── Apple Strict Theme Variable Definitions ─── */
+:root {
+  --bg-primary: #161617; /* Strict Apple system background (macOS dark theme) */
+  --bg-secondary: #1C1C1E; /* Strict Secondary Background */
+  --text-primary: #FFFFFF;
+  --text-secondary: #AEAEB2;
+  --text-tertiary: #8E8E93;
+  --glass-bg: rgba(44, 44, 46, 0.45);
+  --glass-bg-hover: rgba(44, 44, 46, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.12);
+  --sidebar-bg: rgba(30, 30, 30, 0.4);
+  --modal-bg: rgba(30, 30, 30, 0.85);
+  --modal-border: rgba(255, 255, 255, 0.1);
+  --modal-backdrop: rgba(0, 0, 0, 0.5);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.08);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.16);
+  --card-shadow: rgba(0, 0, 0, 0.2);
+  --nav-item-hover-bg: rgba(255, 255, 255, 0.05);
+  --nav-item-hover-color: #FFFFFF;
+  --bottom-nav-bg: rgba(30, 30, 30, 0.7);
+  --bottom-nav-active-bg: rgba(255, 255, 255, 0.06);
+
+  /* Grid styles for map */
+  --grid-color: rgba(255, 255, 255, 0.6);
+  --grid-opacity: 0.04;
+  
+  /* Form elements */
+  --input-bg: rgba(0, 0, 0, 0.25);
+  --input-border: rgba(255, 255, 255, 0.08);
+  --input-focus-bg: rgba(0, 0, 0, 0.35);
+  --segmented-bg: rgba(0, 0, 0, 0.25);
+  --segment-active-bg: rgba(255, 255, 255, 0.12);
+  --message-card-bg: rgba(44, 44, 46, 0.3);
+  --message-card-hover-bg: rgba(44, 44, 46, 0.45);
+}
+
+body.light-theme {
+  --bg-primary: #F2F2F7; /* macOS light system background */
+  --bg-secondary: #FFFFFF; /* macOS light primary content background */
+  --text-primary: #000000;
+  --text-secondary: #636366; /* Muted Apple dark text */
+  --text-tertiary: #8E8E93;
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-hover: rgba(0, 0, 0, 0.14);
+  --sidebar-bg: rgba(235, 235, 240, 0.75);
+  --modal-bg: rgba(255, 255, 255, 0.95);
+  --modal-border: rgba(0, 0, 0, 0.08);
+  --modal-backdrop: rgba(0, 0, 0, 0.3);
+  --scrollbar-thumb: rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
+  --card-shadow: rgba(0, 0, 0, 0.06);
+  --nav-item-hover-bg: rgba(0, 0, 0, 0.04);
+  --nav-item-hover-color: #000000;
+  --bottom-nav-bg: rgba(255, 255, 255, 0.75);
+  --bottom-nav-active-bg: rgba(0, 0, 0, 0.05);
+
+  /* Grid styles for map */
+  --grid-color: rgba(0, 0, 0, 0.2);
+  --grid-opacity: 0.06;
+  
+  /* Form elements */
+  --input-bg: rgba(0, 0, 0, 0.04);
+  --input-border: rgba(0, 0, 0, 0.08);
+  --input-focus-bg: rgba(255, 255, 255, 0.85);
+  --segmented-bg: rgba(0, 0, 0, 0.04);
+  --segment-active-bg: rgba(0, 0, 0, 0.06);
+  --message-card-bg: rgba(255, 255, 255, 0.55);
+  --message-card-hover-bg: rgba(255, 255, 255, 0.75);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Apple strict glass panel styling ─── */
+.liquid-glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(140%);
+  -webkit-backdrop-filter: blur(30px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px var(--card-shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.liquid-glass-panel:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+/* Top Warning Bar - Muted Strict */
+.liquid-glass-yellow-banner {
+  background: rgba(255, 214, 10, 0.06); /* Strict Apple System Yellow */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 214, 10, 0.18);
+  transition: background-color 0.15s ease;
+}
+
+.liquid-glass-yellow-banner:hover {
+  background: rgba(255, 214, 10, 0.1);
+}
+
+/* Strict Buttons */
+.glass-btn-red {
+  background: rgba(255, 69, 58, 0.08); /* Strict Apple System Red */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 69, 58, 0.25);
+  border-radius: 12px;
+  color: #FF453A;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.glass-btn-red:hover {
+  background: rgba(255, 69, 58, 0.14);
+  border-color: rgba(255, 69, 58, 0.4);
+}
+
+.glass-btn-red:active {
+  transform: scale(0.97);
+  background: rgba(255, 69, 58, 0.2);
+}
+
+.glass-btn-green {
+  background: rgba(48, 209, 88, 0.08); /* Strict Apple System Green */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(48, 209, 88, 0.25);
+  border-radius: 12px;
+  color: #30D158;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.glass-btn-green:hover {
+  background: rgba(48, 209, 88, 0.14);
+  border-color: rgba(48, 209, 88, 0.4);
+}
+
+.glass-btn-green:active {
+  transform: scale(0.97);
+  background: rgba(48, 209, 88, 0.2);
+}
+
+/* Modal Styling */
+.glass-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-backdrop);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.glass-modal-content {
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 16px 40px var(--card-shadow);
+}
+
+/* ─── Desktop Optimization Responsive Layout ─── */
+.app-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.desktop-sidebar {
+  width: 260px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.main-content-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+/* Navigation items (Sidebar/Bottom bar) */
+.nav-item-strict {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.nav-item-strict:hover {
+  background: var(--nav-item-hover-bg);
+  color: var(--nav-item-hover-color);
+}
+
+.nav-item-strict.active {
+  background: rgba(10, 132, 255, 0.12); /* Apple light blue accent */
+  color: #0A84FF;
+}
+
+/* Grid Layouts depending on screens */
+.grid-desktop-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Hide elements based on breakpoint */
+@media (max-width: 767px) {
+  .desktop-sidebar {
+    display: none;
+  }
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+  .grid-desktop-two-col {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+/* Animations without neon glow */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.scale-active-click {
+  transition: transform 0.15s ease;
+}
+.scale-active-click:active {
+  transform: scale(0.97);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ─── Premium Message Card & Feed ─── */
+.message-card-premium {
+  background: var(--message-card-bg);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  border: 1px solid var(--glass-border);
+  border-left: 4px solid var(--accent-color, #8E8E93);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.message-card-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.015), transparent);
+  pointer-events: none;
+}
+
+.message-card-premium:hover {
+  background: var(--message-card-hover-bg);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--card-shadow);
+}
+
+.message-card-premium:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Icon circular container */
+.message-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.message-card-premium:hover .message-icon-wrapper {
+  transform: scale(1.06);
+}
+
+/* Pulse indicator for high severity alerts */
+.pulse-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #FF453A;
+  z-index: 10;
+}
+
+.pulse-indicator::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: inherit;
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* ─── Premium Glass Form Inputs & Controls ─── */
+.glass-input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-input:focus {
+  border-color: rgba(10, 132, 255, 0.5);
+  background: var(--input-focus-bg);
+  box-shadow: 0 0 10px rgba(10, 132, 255, 0.15);
+}
+
+.glass-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.glass-segmented-control {
+  display: flex;
+  background: var(--segmented-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 2px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.glass-segment {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.glass-segment.active {
+  background: var(--segment-active-bg);
+  color: var(--text-primary);
+  box-shadow: 0 2px 6px var(--card-shadow);
+}
+
+.glass-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 40px;
+}
+
+.glass-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.glass-checkbox-container:hover {
+  color: var(--text-primary);
+}
+
+.glass-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--input-border);
+  background: var(--input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.glass-checkbox-container:hover .glass-checkbox {
+  border-color: var(--text-tertiary);
+}
+
+.glass-checkbox.checked {
+  background: #30D158;
+  border-color: #30D158;
+}
