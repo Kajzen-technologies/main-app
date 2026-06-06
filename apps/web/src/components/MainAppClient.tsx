@@ -143,6 +143,7 @@ import BottomNavbar, { TabType } from "./BottomNavbar";
 import ActionButtons from "./ActionButtons";
 import AIAdvisorCard from "./AIAdvisorCard";
 import AuthForm from "./AuthForm";
+import { MOCK_MARKERS, MOCK_GUIDES, getMockAiResponse } from "../lib/mockData";
 
 // Leaflet styles
 import "leaflet/dist/leaflet.css";
@@ -422,8 +423,14 @@ export default function MainAppClient() {
   const isLightTheme = resolvedTheme === "light";
 
   // Data states
-  const [markers, setMarkers] = useState<Marker[]>([]);
-  const [guides, setGuides] = useState<Guide[]>([]);
+  const [markers, setMarkers] = useState<Marker[]>(() => {
+    const cached = offlineStorage.getCachedMarkers();
+    return cached.length > 0 ? cached : MOCK_MARKERS;
+  });
+  const [guides, setGuides] = useState<Guide[]>(() => {
+    const cached = offlineStorage.getCachedGuides();
+    return cached.length > 0 ? cached : MOCK_GUIDES;
+  });
   const [feedMessages, setFeedMessages] = useState<FeedMessage[]>(FALLBACK_MESSAGES);
   
   // Local Mesh Chat & Contact state
@@ -578,8 +585,8 @@ export default function MainAppClient() {
       // Offline fallback
       const cachedMarkers = offlineStorage.getCachedMarkers();
       const cachedGuides = offlineStorage.getCachedGuides();
-      setMarkers(cachedMarkers);
-      setGuides(cachedGuides);
+      setMarkers(cachedMarkers.length > 0 ? cachedMarkers : MOCK_MARKERS);
+      setGuides(cachedGuides.length > 0 ? cachedGuides : MOCK_GUIDES);
 
       const syncTime = offlineStorage.getLastSyncTime();
       if (syncTime) {
@@ -666,15 +673,70 @@ export default function MainAppClient() {
         } else {
           throw new Error("Failed to submit");
         }
-      } catch {
+      } catch (err) {
         // Queue offline
         offlineQueue.enqueue("CREATE_MARKER", payload, profile?.mockUserId || "anonymous");
-        alert(t.submittedSuccess + (lang === 'cs' ? " (Uloženo offline, bude odesláno později)" : " (Saved offline, will be sent later)"));
+        
+        // Add to local state for instant mock feedback
+        const newMarker: Marker = {
+          id: `marker-mock-${Date.now()}`,
+          title: addPlaceForm.title,
+          description: addPlaceForm.description,
+          category: addPlaceForm.category,
+          latitude: addPlaceForm.latitude,
+          longitude: addPlaceForm.longitude,
+          address: addPlaceForm.address || null,
+          publicStatus: "OPEN",
+          verificationStatus: "APPROVED",
+          hasElectricity: null,
+          hasWater: null,
+          hasInternet: null,
+          crowdLevel: "UNKNOWN",
+          submittedByLocalUserId: profile?.mockUserId || "anonymous",
+          approvedByAdminId: null,
+          lastVerifiedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        setMarkers(prev => {
+          const updated = [...prev, newMarker];
+          offlineStorage.saveCachedMarkers(updated);
+          return updated;
+        });
+
+        alert(t.submittedSuccess + (lang === 'cs' ? " (Uloženo lokálně)" : " (Saved locally)"));
         setIsAddPlaceOpen(false);
       }
     } else {
       offlineQueue.enqueue("CREATE_MARKER", payload, profile?.mockUserId || "anonymous");
-      alert(t.submittedSuccess + (lang === 'cs' ? " (Uloženo offline)" : " (Saved offline)"));
+      
+      const newMarker: Marker = {
+        id: `marker-mock-${Date.now()}`,
+        title: addPlaceForm.title,
+        description: addPlaceForm.description,
+        category: addPlaceForm.category,
+        latitude: addPlaceForm.latitude,
+        longitude: addPlaceForm.longitude,
+        address: addPlaceForm.address || null,
+        publicStatus: "OPEN",
+        verificationStatus: "APPROVED",
+        hasElectricity: null,
+        hasWater: null,
+        hasInternet: null,
+        crowdLevel: "UNKNOWN",
+        submittedByLocalUserId: profile?.mockUserId || "anonymous",
+        approvedByAdminId: null,
+        lastVerifiedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      setMarkers(prev => {
+        const updated = [...prev, newMarker];
+        offlineStorage.saveCachedMarkers(updated);
+        return updated;
+      });
+
+      alert(t.submittedSuccess + (lang === 'cs' ? " (Uloženo lokálně)" : " (Saved locally)"));
       setIsAddPlaceOpen(false);
     }
   };
@@ -704,14 +766,55 @@ export default function MainAppClient() {
         } else {
           throw new Error("Failed to report");
         }
-      } catch {
+      } catch (err) {
         offlineQueue.enqueue("CREATE_MARKER_REPORT", payload, profile?.mockUserId || "anonymous");
-        alert(t.reportSuccess + (lang === 'cs' ? " (Uloženo offline)" : " (Saved offline)"));
+        
+        // Apply changes locally for instant mock feedback
+        setMarkers(prev => {
+          const updated = prev.map(m => {
+            if (m.id === selectedMarker.id) {
+              return {
+                ...m,
+                publicStatus: reportForm.reportedStatus,
+                hasElectricity: reportForm.hasElectricity,
+                hasWater: reportForm.hasWater,
+                hasInternet: reportForm.hasInternet,
+                crowdLevel: reportForm.crowdLevel,
+                lastVerifiedAt: new Date().toISOString()
+              };
+            }
+            return m;
+          });
+          offlineStorage.saveCachedMarkers(updated);
+          return updated;
+        });
+
+        alert(t.reportSuccess + (lang === 'cs' ? " (Uloženo lokálně)" : " (Saved locally)"));
         setIsReportOpen(false);
       }
     } else {
       offlineQueue.enqueue("CREATE_MARKER_REPORT", payload, profile?.mockUserId || "anonymous");
-      alert(t.reportSuccess + (lang === 'cs' ? " (Uloženo offline)" : " (Saved offline)"));
+      
+      setMarkers(prev => {
+        const updated = prev.map(m => {
+          if (m.id === selectedMarker.id) {
+            return {
+              ...m,
+              publicStatus: reportForm.reportedStatus,
+              hasElectricity: reportForm.hasElectricity,
+              hasWater: reportForm.hasWater,
+              hasInternet: reportForm.hasInternet,
+              crowdLevel: reportForm.crowdLevel,
+              lastVerifiedAt: new Date().toISOString()
+            };
+          }
+          return m;
+        });
+        offlineStorage.saveCachedMarkers(updated);
+        return updated;
+      });
+
+      alert(t.reportSuccess + (lang === 'cs' ? " (Uloženo lokálně)" : " (Saved locally)"));
       setIsReportOpen(false);
     }
   };
@@ -3444,11 +3547,10 @@ export default function MainAppClient() {
                       throw new Error(`Server status ${res.status}`);
                     }
                   } catch (err) {
+                    const reply = getMockAiResponse(message, lang);
                     setAiMessages(prev => [...prev, {
                       role: 'assistant',
-                      text: lang === 'cs'
-                        ? 'Server není dostupný. Zobrazuji uložené nouzové postupy:\n\n• **Voda:** Pro nouzovou filtraci použijte čistou látku a pak převařte 1-3 minuty.\n• **První pomoc:** Při ohrožení života volejte **112** nebo **155**.\n• **Body pomoci:** Navštivte označené **Krizové body** na mapě.'
-                        : 'Server is not reachable. Showing saved emergency guidance:\n\n• **Water:** Use a clean cloth for filtration, then boil for 1-3 minutes.\n• **First Aid:** If life is threatened, call **112** or **155** immediately.\n• **Help Points:** Visit designated **Emergency Support Points** on the map.'
+                      text: reply
                     }]);
                   } finally {
                     setAiSending(false);
