@@ -5,16 +5,21 @@ export const profileStorage = {
   getProfileOrInit(deviceType: "web" | "mobile" = "web"): LocalUserProfile {
     let profile = offlineStorage.getProfile();
     if (!profile) {
-      const anonUser = createAnonymousUser(deviceType, "cs");
+      const anonUser = createAnonymousUser(deviceType, "en");
       profile = {
         mockUserId: anonUser.id,
         homeAddress: null,
         homeLatitude: null,
         homeLongitude: null,
-        preferredLanguage: "cs",
+        preferredLanguage: "en",
+        favoriteMarkerIds: [],
         createdAt: anonUser.createdAt,
         updatedAt: anonUser.createdAt
       };
+      offlineStorage.saveProfile(profile);
+    } else if (!Array.isArray((profile as any).favoriteMarkerIds)) {
+      // Migrate older profiles that pre-date favoriteMarkerIds
+      profile = { ...profile, favoriteMarkerIds: [] };
       offlineStorage.saveProfile(profile);
     }
     return profile;

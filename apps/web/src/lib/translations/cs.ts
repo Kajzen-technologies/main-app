@@ -54,4 +54,10 @@ export const cs = {
   issueType: "Typ problému",
   comment: "Komentář",
   pendingQueue: "Čeká na odeslání (offline): {count}",
+  localId: "MŮJ ANONYMNÍ IDENTIFIKÁTOR (LOCAL ID)",
+  addressPlaceholder: "Např. Václavské náměstí 1, Praha",
+  addressSaved: "Adresa byla uložena.",
+  coordinatesSet: "✓ Souřadnice zaměřeny: ",
+  gpsTracking: "Zaměření GPS polohy:",
+  tracking: "Zaměřování...",
 };

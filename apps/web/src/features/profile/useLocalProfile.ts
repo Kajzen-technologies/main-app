@@ -37,12 +37,13 @@ export function useLocalProfile(isOnline: boolean) {
 
     if (isOnline && address.trim()) {
       try {
+        const citySuffix = profile?.preferredLanguage === "cs" ? ", Praha" : ", Prague";
         const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          address + ", Praha"
+          address + citySuffix
         )}&format=json&limit=1`;
         const res = await fetch(url, {
           headers: {
-            "Accept-Language": "cs",
+            "Accept-Language": profile?.preferredLanguage || "en",
             "User-Agent": "PragueBlackoutResilienceApp/1.0"
           }
         });
@@ -67,10 +68,27 @@ export function useLocalProfile(isOnline: boolean) {
     setProfile(updated);
   };
 
+  const toggleFavoriteMarker = (markerId: string) => {
+    if (!profile) return;
+    const current = profile.favoriteMarkerIds || [];
+    const next = current.includes(markerId)
+      ? current.filter(id => id !== markerId)
+      : [...current, markerId];
+    const updated = { ...profile, favoriteMarkerIds: next };
+    profileStorage.saveProfile(updated);
+    setProfile(updated);
+  };
+
+  const isFavorite = (markerId: string): boolean => {
+    return !!profile?.favoriteMarkerIds?.includes(markerId);
+  };
+
   return {
     profile,
     updateLanguage,
     clearHomeAddress,
-    saveHomeAddress
+    saveHomeAddress,
+    toggleFavoriteMarker,
+    isFavorite
   };
 }

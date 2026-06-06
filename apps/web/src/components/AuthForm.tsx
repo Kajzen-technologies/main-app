@@ -3,11 +3,12 @@ import { useState } from 'react';
 interface AuthFormProps {
   onSuccess: (user: { name: string; isVolunteer: boolean; roles: string[]; zone: string; phone: string; isGuest?: boolean }) => void;
   onClose?: () => void;
+  lang?: "cs" | "en";
 }
 
 type Mode = 'LOGIN' | 'REGISTER';
 
-export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
+export default function AuthForm({ onSuccess, onClose, lang = "en" }: AuthFormProps) {
   const [mode, setMode] = useState<Mode>('LOGIN');
   const [error, setError] = useState<string | null>(null);
 
@@ -15,7 +16,7 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [name, setName] = useState('');
-  const [zone, setZone] = useState('Praha 4 (Zóna A - Pankrác)');
+  const [zone, setZone] = useState(lang === 'cs' ? 'Praha 4 (Zóna A - Pankrác)' : 'Prague 4 (Zone A - Pankrac)');
   const [isVolunteer, setIsVolunteer] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
@@ -35,21 +36,44 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
 
     // Simple validations
     if (!phone.trim()) {
-      setError('Zadejte prosím své telefonní číslo nebo e-mail.');
+      setError(lang === 'cs' ? 'Zadejte prosím své telefonní číslo nebo e-mail.' : 'Please enter your phone number or email.');
       return;
     }
     if (pin.length < 6) {
-      setError('Heslo nebo PIN musí mít alespoň 6 znaků.');
+      setError(lang === 'cs' ? 'Heslo nebo PIN musí mít alespoň 6 znaků.' : 'Password or PIN must be at least 6 characters.');
       return;
     }
 
     if (mode === 'REGISTER') {
       if (!name.trim()) {
-        setError('Zadejte prosím své celé jméno.');
+        setError(lang === 'cs' ? 'Zadejte prosím své celé jméno.' : 'Please enter your full name.');
         return;
       }
-      
-      // Success Registration
+
+      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+      const localUserId = typeof window !== 'undefined'
+        ? localStorage.getItem('prague_resilience_local_user_id') || `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+        : `local_${Date.now()}`;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('prague_resilience_local_user_id', localUserId);
+      }
+
+      try {
+        await fetch(`${API_BASE}/users/volunteer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            phone: phone.trim(),
+            roles: isVolunteer ? selectedRoles : [],
+            zone,
+            localUserId
+          })
+        });
+      } catch (err) {
+        console.warn("Registration upsert offline; profile saved locally", err);
+      }
+
       onSuccess({
         name: name.trim(),
         isVolunteer,
@@ -75,20 +99,20 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
 
         if (res.ok) {
           onSuccess({
-            name: 'Administrátor',
+            name: lang === 'cs' ? 'Administrátor' : 'Administrator',
             isVolunteer: false,
             roles: ['ADMIN'],
-            zone: 'Praha 1 (Zóna B - Staré Město)',
+            zone: lang === 'cs' ? 'Praha 1 (Zóna B - Staré Město)' : 'Prague 1 (Zone B - Old Town)',
             phone: phone.trim(),
             isGuest: false
           });
         } else {
-          // If response not ok, perform normal mock fallback login for demo/offline citizens
+          // Fallback login
           onSuccess({
-            name: 'Jan Dvořák',
+            name: lang === 'cs' ? 'Jan Dvořák' : 'John Doe',
             isVolunteer: true,
-            roles: ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'],
-            zone: 'Praha 4 (Zóna A - Pankrác)',
+            roles: lang === 'cs' ? ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'] : ['Active Volunteer', 'Zone A (Pankrac)'],
+            zone: lang === 'cs' ? 'Praha 4 (Zóna A - Pankrác)' : 'Prague 4 (Zone A - Pankrac)',
             phone: phone.trim(),
             isGuest: false
           });
@@ -96,10 +120,10 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
       } catch (err) {
         // Fallback for offline mode
         onSuccess({
-          name: 'Jan Dvořák',
+          name: lang === 'cs' ? 'Jan Dvořák' : 'John Doe',
           isVolunteer: true,
-          roles: ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'],
-          zone: 'Praha 4 (Zóna A - Pankrác)',
+          roles: lang === 'cs' ? ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'] : ['Active Volunteer', 'Zone A (Pankrac)'],
+          zone: lang === 'cs' ? 'Praha 4 (Zóna A - Pankrác)' : 'Prague 4 (Zone A - Pankrac)',
           phone: phone.trim(),
           isGuest: false
         });
@@ -110,10 +134,10 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
   // Bypass login for quick developer preview
   const handleBypass = () => {
     onSuccess({
-      name: 'Jan Dvořák',
+      name: lang === 'cs' ? 'Jan Dvořák' : 'John Doe',
       isVolunteer: true,
-      roles: ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'],
-      zone: 'Praha 4 (Zóna A - Pankrác)',
+      roles: lang === 'cs' ? ['Aktivní Dobrovolník', 'Zóna A (Pankrác)'] : ['Active Volunteer', 'Zone A (Pankrac)'],
+      zone: lang === 'cs' ? 'Praha 4 (Zóna A - Pankrác)' : 'Prague 4 (Zone A - Pankrac)',
       phone: '+420 777 123 456',
       isGuest: false
     });
@@ -131,7 +155,7 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
         gap: '24px',
         animation: 'fadeIn 0.3s ease-out',
         position: 'relative',
-        background: 'var(--modal-bg)', /* Solid apple slate glass for modal overlay */
+        background: 'var(--modal-bg)',
         border: '1px solid var(--modal-border)'
       }}
     >
@@ -155,7 +179,7 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
             justifyContent: 'center',
             zIndex: 10
           }}
-          title="Zavřít"
+          title={lang === 'cs' ? "Zavřít" : "Close"}
         >
           ×
         </button>
@@ -167,12 +191,12 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
           width: '48px',
           height: '48px',
           borderRadius: '12px',
-          background: 'rgba(10, 132, 255, 0.1)',
-          border: '1.5px solid rgba(10, 132, 255, 0.25)',
+          background: 'rgba(var(--color-info-rgb), 0.1)',
+          border: '1.5px solid rgba(var(--color-info-rgb), 0.25)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#0A84FF',
+          color: 'var(--color-info)',
           marginBottom: '4px'
         }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -180,16 +204,16 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <span style={{ fontSize: '11px', fontWeight: '800', color: '#0A84FF', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Nouzová Mesh Síť
+        <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-info)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          {lang === 'cs' ? "Nouzová Mesh Síť" : "Emergency Mesh Network"}
         </span>
         <h2 style={{ fontSize: '22px', fontWeight: '800', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-          {mode === 'LOGIN' ? 'Přihlášení k profilu' : 'Vytvořit krizový profil'}
+          {mode === 'LOGIN' ? (lang === 'cs' ? 'Přihlášení k profilu' : 'Profile Login') : (lang === 'cs' ? 'Vytvořit krizový profil' : 'Create Crisis Profile')}
         </h2>
         <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }}>
           {mode === 'LOGIN' 
-            ? 'Přihlaste se ke svému krizovému účtu pomocí telefonu a zabezpečeného PINu.'
-            : 'Zaregistrujte svůj profil offline do mesh sítě, abyste mohli koordinovat pomoc.'}
+            ? (lang === 'cs' ? 'Přihlaste se ke svému krizovému účtu pomocí telefonu a zabezpečeného PINu.' : 'Log in to your crisis account using your phone and secure PIN.')
+            : (lang === 'cs' ? 'Zaregistrujte svůj profil offline do mesh sítě, abyste mohli koordinovat pomoc.' : 'Register your profile offline in the mesh network to coordinate assistance.')}
         </p>
       </div>
 
@@ -200,25 +224,25 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
           className={`glass-segment ${mode === 'LOGIN' ? 'active' : ''}`}
           onClick={() => { setMode('LOGIN'); setError(null); }}
         >
-          Přihlášení
+          {lang === 'cs' ? 'Přihlášení' : 'Log In'}
         </button>
         <button 
           type="button"
           className={`glass-segment ${mode === 'REGISTER' ? 'active' : ''}`}
           onClick={() => { setMode('REGISTER'); setError(null); }}
         >
-          Registrace
+          {lang === 'cs' ? 'Registrace' : 'Register'}
         </button>
       </div>
 
       {/* Error alert */}
       {error && (
         <div style={{
-          background: 'rgba(255, 69, 58, 0.08)',
-          border: '1px solid rgba(255, 69, 58, 0.25)',
+          background: 'rgba(var(--color-danger-rgb), 0.08)',
+          border: '1px solid rgba(var(--color-danger-rgb), 0.25)',
           borderRadius: '10px',
           padding: '12px 14px',
-          color: '#FF453A',
+          color: 'var(--color-danger)',
           fontSize: '12.5px',
           fontWeight: '600',
           lineHeight: '1.4',
@@ -234,12 +258,12 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
         {mode === 'REGISTER' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label style={{ fontSize: '11.5px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Celé jméno
+              {lang === 'cs' ? 'Celé jméno' : 'Full Name'}
             </label>
             <input 
               type="text" 
               className="glass-input" 
-              placeholder="Např. Jan Dvořák"
+              placeholder={lang === 'cs' ? "Např. Jan Dvořák" : "e.g., John Doe"}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -248,12 +272,12 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <label style={{ fontSize: '11.5px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Telefonní číslo
+            {lang === 'cs' ? 'Telefonní číslo' : 'Phone Number'}
           </label>
           <input 
             type="tel" 
             className="glass-input" 
-            placeholder="Např. +420 777 123 456"
+            placeholder={lang === 'cs' ? "Např. +420 777 123 456" : "e.g., +420 777 123 456"}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
@@ -261,7 +285,7 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <label style={{ fontSize: '11.5px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            {mode === 'LOGIN' ? 'Krizový PIN (kód)' : 'Vytvořit zabezpečovací PIN (min. 6 číslic)'}
+            {mode === 'LOGIN' ? (lang === 'cs' ? 'Krizový PIN (kód)' : 'Crisis PIN') : (lang === 'cs' ? 'Vytvořit zabezpečovací PIN (min. 6 číslic)' : 'Create Security PIN (min. 6 digits)')}
           </label>
           <input 
             type="password" 
@@ -278,7 +302,7 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
             {/* Zone Selector */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '11.5px', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Krizová lokální zóna
+                {lang === 'cs' ? 'Krizová lokální zóna' : 'Crisis Local Zone'}
               </label>
               <select 
                 className="glass-input glass-select"
@@ -286,10 +310,18 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
                 onChange={(e) => setZone(e.target.value)}
                 style={{ cursor: 'pointer' }}
               >
-                <option value="Praha 4 (Zóna A - Pankrác)">Praha 4 (Zóna A - Pankrác)</option>
-                <option value="Praha 1 (Zóna B - Staré Město)">Praha 1 (Zóna B - Staré Město)</option>
-                <option value="Praha 8 (Zóna C - Karlín)">Praha 8 (Zóna C - Karlín)</option>
-                <option value="Praha 5 (Zóna D - Smíchov)">Praha 5 (Zóna D - Smíchov)</option>
+                <option value={lang === 'cs' ? "Praha 4 (Zóna A - Pankrác)" : "Prague 4 (Zone A - Pankrac)"}>
+                  {lang === 'cs' ? "Praha 4 (Zóna A - Pankrác)" : "Prague 4 (Zone A - Pankrac)"}
+                </option>
+                <option value={lang === 'cs' ? "Praha 1 (Zóna B - Staré Město)" : "Prague 1 (Zone B - Old Town)"}>
+                  {lang === 'cs' ? "Praha 1 (Zóna B - Staré Město)" : "Prague 1 (Zone B - Old Town)"}
+                </option>
+                <option value={lang === 'cs' ? "Praha 8 (Zóna C - Karlín)" : "Prague 8 (Zone C - Karlin)"}>
+                  {lang === 'cs' ? "Praha 8 (Zóna C - Karlín)" : "Prague 8 (Zone C - Karlin)"}
+                </option>
+                <option value={lang === 'cs' ? "Praha 5 (Zóna D - Smíchov)" : "Prague 5 (Zone D - Smichov)"}>
+                  {lang === 'cs' ? "Praha 5 (Zóna D - Smíchov)" : "Prague 5 (Zone D - Smichov)"}
+                </option>
               </select>
             </div>
 
@@ -301,12 +333,12 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
               >
                 <div className={`glass-checkbox ${isVolunteer ? 'checked' : ''}`}>
                   {isVolunteer && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   )}
                 </div>
-                <span style={{ fontWeight: '600' }}>Nabídnout pomoc jako dobrovolník</span>
+                <span style={{ fontWeight: '600' }}>{lang === 'cs' ? "Nabídnout pomoc jako dobrovolník" : "Offer help as a volunteer"}</span>
               </div>
 
               {isVolunteer && (
@@ -322,40 +354,40 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
                   animation: 'fadeIn 0.2s ease-out'
                 }}>
                   <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.02em', marginBottom: '2px' }}>
-                    Vyberte dovednosti/prostředky:
+                    {lang === 'cs' ? "Vyberte dovednosti/prostředky:" : "Select skills/resources:"}
                   </span>
                   
                   <div className="glass-checkbox-container" onClick={() => toggleRole('Aktivní Dobrovolník')}>
                     <div className={`glass-checkbox ${selectedRoles.includes('Aktivní Dobrovolník') ? 'checked' : ''}`}>
                       {selectedRoles.includes('Aktivní Dobrovolník') && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       )}
                     </div>
-                    <span>🙋‍♂️ Fyzická pomoc (klízení zátarasů)</span>
+                    <span>{lang === 'cs' ? "🙋‍♂️ Fyzická pomoc (klízení zátarasů)" : "🙋‍♂️ Physical Help (clearing blockages)"}</span>
                   </div>
 
                   <div className="glass-checkbox-container" onClick={() => toggleRole('První Pomoc')}>
                     <div className={`glass-checkbox ${selectedRoles.includes('První Pomoc') ? 'checked' : ''}`}>
                       {selectedRoles.includes('První Pomoc') && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       )}
                     </div>
-                    <span>🚑 Zdravotník / První pomoc</span>
+                    <span>{lang === 'cs' ? "🚑 Zdravotník / První pomoc" : "🚑 Medic / First Aid"}</span>
                   </div>
 
                   <div className="glass-checkbox-container" onClick={() => toggleRole('Transport')}>
                     <div className={`glass-checkbox ${selectedRoles.includes('Transport') ? 'checked' : ''}`}>
                       {selectedRoles.includes('Transport') && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       )}
                     </div>
-                    <span>🚗 Přeprava osob (4x4 auto)</span>
+                    <span>{lang === 'cs' ? "🚗 Přeprava osob (4x4 auto)" : "🚗 Transport (4x4 vehicle)"}</span>
                   </div>
                 </div>
               )}
@@ -370,19 +402,19 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
           style={{
             width: '100%',
             padding: '13px',
-            background: '#30D158', /* Strict Apple green accent button */
+            background: 'var(--color-success)',
             border: 'none',
             borderRadius: '10px',
-            color: '#FFFFFF',
+            color: 'var(--text-primary)',
             fontSize: '14px',
             fontWeight: '750',
             cursor: 'pointer',
             outline: 'none',
-            boxShadow: '0 4px 12px rgba(48, 209, 88, 0.2)',
+            boxShadow: '0 4px 12px rgba(var(--color-success-rgb), 0.2)',
             marginTop: '8px'
           }}
         >
-          {mode === 'LOGIN' ? 'Přihlásit se' : 'Zaregistrovat profil'}
+          {mode === 'LOGIN' ? (lang === 'cs' ? 'Přihlásit se' : 'Log In') : (lang === 'cs' ? 'Zaregistrovat profil' : 'Register Profile')}
         </button>
       </form>
 
@@ -400,14 +432,14 @@ export default function AuthForm({ onSuccess, onClose }: AuthFormProps) {
           onClick={handleBypass}
           style={{ 
             fontSize: '12.5px', 
-            color: '#0A84FF', 
+            color: 'var(--color-info)', 
             fontWeight: '600', 
             cursor: 'pointer',
             transition: 'opacity 0.15s ease'
           }}
           className="scale-active-click"
         >
-          Přihlásit se jako host (Jan Dvořák) ↗
+          {lang === 'cs' ? "Přihlásit se jako host (Jan Dvořák) ↗" : "Log in as Guest (John Doe) ↗"}
         </span>
       </div>
     </div>

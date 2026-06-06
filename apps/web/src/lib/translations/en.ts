@@ -1,5 +1,5 @@
 export const en = {
-  appName: "Prague Resilient",
+  appName: "Prague Now",
   appSubtitle: "Emergency blackout information portal",
   searchPlaceholder: "Search place or category...",
   noResults: "No places found",
@@ -54,4 +54,10 @@ export const en = {
   issueType: "Issue Type",
   comment: "Comment",
   pendingQueue: "Pending sync (offline): {count}",
+  localId: "MY ANONYMOUS IDENTIFIER (LOCAL ID)",
+  addressPlaceholder: "e.g., Wenceslas Square 1, Prague",
+  addressSaved: "Address has been saved.",
+  coordinatesSet: "✓ Coordinates acquired: ",
+  gpsTracking: "GPS Tracking:",
+  tracking: "Tracking...",
 };

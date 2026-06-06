@@ -31,7 +31,7 @@ export default function MapCard({
           position: 'absolute', 
           inset: 0, 
           opacity: 'var(--grid-opacity, 0.04)' as any, 
-          backgroundImage: 'linear-gradient(var(--grid-color, rgba(255, 255, 255, 0.6)) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color, rgba(255, 255, 255, 0.6)) 1px, transparent 1px)', 
+          backgroundImage: 'linear-gradient(var(--grid-color, rgba(var(--rgb-overlay), 0.6)) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color, rgba(var(--rgb-overlay), 0.6)) 1px, transparent 1px)', 
           backgroundSize: '24px 24px' 
         }} 
       />
@@ -43,7 +43,7 @@ export default function MapCard({
           width: '120px',
           height: '120px',
           borderRadius: '50%',
-          border: '1px solid var(--grid-color, rgba(255, 255, 255, 0.08))',
+          border: '1px solid var(--grid-color, rgba(var(--rgb-overlay), 0.08))',
           background: 'transparent'
         }}
       />
@@ -53,7 +53,7 @@ export default function MapCard({
           width: '6px',
           height: '6px',
           borderRadius: '50%',
-          backgroundColor: '#30D158',
+          backgroundColor: 'var(--color-success)',
           opacity: 0.6
         }}
       />
@@ -105,7 +105,7 @@ export default function MapCard({
           justifyContent: 'center'
         }}
       >
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#30D158" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z"/>
         </svg>
       </div>
@@ -123,7 +123,7 @@ export default function MapCard({
           justifyContent: 'center'
         }}
       >
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A84FF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--color-info)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 10.5h-5.5V5h-3v5.5H5v3h5.5V19h3v-5.5H19v-3z"/>
         </svg>
       </div>

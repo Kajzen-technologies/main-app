@@ -1,14 +1,16 @@
 interface ActionButtonsProps {
   onSosClick?: () => void;
   onVolunteerClick?: () => void;
+  lang?: "cs" | "en";
 }
 
 export default function ActionButtons({
   onSosClick,
-  onVolunteerClick
+  onVolunteerClick,
+  lang = "en"
 }: ActionButtonsProps) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', width: '100%', boxSizing: 'border-box' }}>
+    <div className="action-buttons-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', width: '100%', boxSizing: 'border-box' }}>
       
       {/* SOS NOUZE BUTTON */}
       <button 
@@ -25,8 +27,12 @@ export default function ActionButtons({
           outline: 'none'
         }}
       >
-        <span style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '0.01em', color: '#FF453A' }}>SOS NOUZE</span>
-        <span style={{ fontSize: '11px', color: '#FF453A', opacity: 0.8, fontWeight: '600' }}>Potřebuji pomoc</span>
+        <span style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '0.01em', color: 'var(--color-danger)' }}>
+          {lang === "cs" ? "SOS NOUZE" : "SOS EMERGENCY"}
+        </span>
+        <span style={{ fontSize: '11px', color: 'var(--color-danger)', opacity: 0.8, fontWeight: '600' }}>
+          {lang === "cs" ? "Potřebuji pomoc" : "I need help"}
+        </span>
       </button>
 
       {/* DOBROVOLNÍK BUTTON */}
@@ -44,8 +50,12 @@ export default function ActionButtons({
           outline: 'none'
         }}
       >
-        <span style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '0.01em', color: '#30D158' }}>DOBROVOLNÍK</span>
-        <span style={{ fontSize: '11px', color: '#30D158', opacity: 0.8, fontWeight: '600' }}>Mohu pomoct</span>
+        <span style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '0.01em', color: 'var(--color-success)' }}>
+          {lang === "cs" ? "DOBROVOLNÍK" : "VOLUNTEER"}
+        </span>
+        <span style={{ fontSize: '11px', color: 'var(--color-success)', opacity: 0.8, fontWeight: '600' }}>
+          {lang === "cs" ? "Mohu pomoct" : "I can help"}
+        </span>
       </button>
 
     </div>

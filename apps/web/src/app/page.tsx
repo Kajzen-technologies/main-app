@@ -8,13 +8,13 @@ const MainAppClient = dynamic(() => import("../components/MainAppClient"), {
       alignItems: "center",
       justifyContent: "center",
       height: "100vh",
-      backgroundColor: "#060913",
-      color: "#94a3b8",
-      fontFamily: "sans-serif",
+      backgroundColor: "var(--bg-canvas)",
+      color: "var(--text-secondary)",
+      fontFamily: "var(--font-sans), sans-serif",
       fontSize: "18px",
       fontWeight: "500"
     }}>
-      Načítání aplikace Praha Odolná / Loading...
+      Loading Prague Resilient...
     </div>
   )
 });

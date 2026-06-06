@@ -1,8 +1,9 @@
 interface AIAdvisorCardProps {
   onOpen?: () => void;
+  lang?: "cs" | "en";
 }
 
-export default function AIAdvisorCard({ onOpen }: AIAdvisorCardProps) {
+export default function AIAdvisorCard({ onOpen, lang = "en" }: AIAdvisorCardProps) {
   return (
     <div 
       className="liquid-glass-panel"
@@ -24,15 +25,15 @@ export default function AIAdvisorCard({ onOpen }: AIAdvisorCardProps) {
             width: '8px', 
             height: '8px', 
             borderRadius: '50%', 
-            background: '#0A84FF', 
+            background: 'var(--color-info)', 
             display: 'inline-block'
           }} />
           <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-            Offline AI Advisor
+            {lang === "cs" ? "Offline poradce" : "Offline Advisor"}
           </span>
         </div>
         <span style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-          Lokální model. Rady pro filtrování vody a zacházení s jističi bez sítě.
+          {lang === "cs" ? "Stručné nouzové postupy dostupné i bez připojení." : "Brief emergency guides available without a connection."}
         </span>
       </div>
       <button 
@@ -42,21 +43,21 @@ export default function AIAdvisorCard({ onOpen }: AIAdvisorCardProps) {
           onOpen?.();
         }}
         style={{ 
-          color: '#0A84FF', 
+          color: 'var(--color-info)', 
           fontSize: '12px', 
           fontWeight: '700', 
           whiteSpace: 'nowrap', 
-          background: 'rgba(10, 132, 255, 0.08)', 
+          background: 'rgba(var(--color-info-rgb), 0.08)', 
           padding: '8px 14px', 
           borderRadius: '8px', 
-          border: '1px solid rgba(10, 132, 255, 0.2)', 
+          border: '1px solid rgba(var(--color-info-rgb), 0.2)', 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center', 
           cursor: 'pointer'
         }}
       >
-        Otevřít
+        {lang === "cs" ? "Otevřít" : "Open"}
       </button>
     </div>
   );

@@ -21,7 +21,7 @@ async function main() {
       email: "admin@praha-blackout.demo",
       role: "ADMIN",
       name: "Prague Admin",
-      preferredLanguage: "cs",
+      preferredLanguage: "en",
     },
   });
 
@@ -29,7 +29,7 @@ async function main() {
     data: {
       type: "ANONYMOUS",
       localUserId: "local_user_demo888",
-      preferredLanguage: "cs",
+      preferredLanguage: "en",
     },
   });
 
@@ -38,8 +38,8 @@ async function main() {
   // 3. Create Seed Markers (Prague locations)
   const markersData = [
     {
-      title: "Všeobecná fakultní nemocnice v Praze",
-      description: "Hlavní pohotovostní lékařská péče. Nouzové zdroje elektřiny funkční.",
+      title: "General University Hospital in Prague",
+      description: "Main emergency medical care. Emergency power generators are functional.",
       category: "HOSPITAL",
       latitude: 50.0735,
       longitude: 14.4211,
@@ -53,8 +53,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Lékárna U sv. Ludmily",
-      description: "Distribuce základních léků a zdravotnického materiálu.",
+      title: "St. Ludmila Pharmacy",
+      description: "Distribution of basic medicines and medical supplies.",
       category: "PHARMACY",
       latitude: 50.0759,
       longitude: 14.4368,
@@ -68,8 +68,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "MOL Praha Argentinská",
-      description: "Čerpací stanice s náhradním generátorem. Prodej PHM omezen na max 20L na osobu.",
+      title: "MOL Prague Argentinska",
+      description: "Gas station with a backup generator. Fuel sale limited to max 20L per person.",
       category: "GAS_STATION",
       latitude: 50.1065,
       longitude: 14.4445,
@@ -83,8 +83,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Policie ČR - Místní oddělení Krakovská",
-      description: "Policejní služebna. Hlášení incidentů a nouzová asistence.",
+      title: "Police of the Czech Republic - Krakovska Station",
+      description: "Police station. Incident reporting and emergency assistance.",
       category: "POLICE_STATION",
       latitude: 50.0792,
       longitude: 14.4278,
@@ -98,8 +98,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Hasičská stanice 1 - Sokolská",
-      description: "Hasičský záchranný sbor hl. m. Prahy. Nouzové zásobování vodou a technická pomoc.",
+      title: "Fire Station 1 - Sokolska",
+      description: "Prague Fire Rescue Service. Emergency water supply and technical assistance.",
       category: "FIRE_STATION",
       latitude: 50.0768,
       longitude: 14.4299,
@@ -114,7 +114,7 @@ async function main() {
     },
     {
       title: "Albert Supermarket - I.P. Pavlova",
-      description: "Prodejna potravin. Omezená otevírací doba, platba pouze v hotovosti (CZK/EUR).",
+      description: "Grocery store. Limited opening hours, cash payment only (CZK/EUR).",
       category: "SUPERMARKET",
       latitude: 50.0752,
       longitude: 14.4305,
@@ -128,8 +128,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Praha Hlavní nádraží (Dopravní Uzel)",
-      description: "Vlakové nádraží. Náhradní osvětlení zapnuto. Informační tabule mimo provoz.",
+      title: "Prague Main Railway Station (Transport Hub)",
+      description: "Train station. Backup lighting on. Information boards out of service.",
       category: "PUBLIC_TRANSPORT_HUB",
       latitude: 50.0831,
       longitude: 14.4361,
@@ -143,8 +143,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Úřad městské části Praha 2",
-      description: "Krizové koordinační centrum Prahy 2. Oficiální informace a registrace dobrovolníků.",
+      title: "Prague 2 District Office",
+      description: "Prague 2 Crisis Coordination Center. Official information and volunteer registration.",
       category: "CITY_DISTRICT_OFFICE",
       latitude: 50.0757,
       longitude: 14.4292,
@@ -158,8 +158,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Komunitní centrum Sokol Vinohrady",
-      description: "Místo pro ohřev, pitnou vodu a nabití drobné elektroniky.",
+      title: "Sokol Vinohrady Community Center",
+      description: "Place for heating, drinking water, and charging small electronics.",
       category: "COMMUNITY_CENTER",
       latitude: 50.0772,
       longitude: 14.4411,
@@ -173,8 +173,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Základní škola Londýnská",
-      description: "Dočasný nouzový úkryt a evakuační středisko pro občany.",
+      title: "Londynska Elementary School",
+      description: "Temporary emergency shelter and evacuation center for citizens.",
       category: "SCHOOL",
       latitude: 50.0741,
       longitude: 14.4335,
@@ -188,8 +188,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Domov pro seniory Máchova",
-      description: "Péče o seniory a zranitelné občany. Hledáme dobrovolníky na výpomoc.",
+      title: "Senior Home Machova",
+      description: "Care for senior citizens and vulnerable individuals. Looking for volunteers to help.",
       category: "ELDERLY_CARE",
       latitude: 50.0718,
       longitude: 14.4385,
@@ -203,8 +203,8 @@ async function main() {
       lastVerifiedAt: new Date(),
     },
     {
-      title: "Nouzové podpůrné místo Náměstí Míru",
-      description: "Distribuce teplého jídla, pitné vody, přikrývek a krizová psychologická pomoc.",
+      title: "Namesti Miru Emergency Support Point",
+      description: "Distribution of hot food, drinking water, blankets, and crisis psychological support.",
       category: "EMERGENCY_SUPPORT_POINT",
       latitude: 50.0751,
       longitude: 14.4365,

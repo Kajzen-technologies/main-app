@@ -4,6 +4,7 @@ export interface LocalUserProfile {
   homeLatitude: number | null;
   homeLongitude: number | null;
   preferredLanguage: "cs" | "en";
+  favoriteMarkerIds: string[];
   createdAt: string;
   updatedAt: string;
 }

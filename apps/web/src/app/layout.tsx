@@ -1,9 +1,26 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { ThemeProvider, themeInitScript } from "../lib/theme/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Praha Odolná - Blackout Resilience App",
-  description: "Nouzový portál a interaktivní mapa pro obyvatele Prahy během výpadku proudu.",
+  title: "Prague Now",
+  description: "Emergency portal and interactive map for Prague residents during a blackout.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "RescueMesh"
+  }
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#111214" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" }
+  ]
 };
 
 export default function RootLayout({
@@ -12,8 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="cs">
-      <body>{children}</body>
+    <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

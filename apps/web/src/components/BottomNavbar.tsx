@@ -1,17 +1,28 @@
 import React from 'react';
 
-export type TabType = 'MAPA' | 'NÁVODY' | 'POMOC' | 'ZPRÁVY' | 'PROFIL';
+export type TabType = 'MAPA' | 'NÁVODY' | 'POMOC' | 'ZPRÁVY' | 'PROFIL' | 'CHAT' | 'SETTINGS';
 
 interface BottomNavbarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
+  lang?: "cs" | "en";
 }
 
-export default function BottomNavbar({ activeTab, onTabChange }: BottomNavbarProps) {
+export default function BottomNavbar({ activeTab, onTabChange, lang = "en" }: BottomNavbarProps) {
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
+      {
+          id: 'NÁVODY',
+          label: lang === "cs" ? "NÁVODY" : "GUIDES",
+          icon: (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+          )
+      },
     {
       id: 'MAPA',
-      label: 'MAPA',
+      label: lang === "cs" ? "MAPA" : "MAP",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
@@ -20,19 +31,20 @@ export default function BottomNavbar({ activeTab, onTabChange }: BottomNavbarPro
         </svg>
       )
     },
-    {
-      id: 'NÁVODY',
-      label: 'NÁVODY',
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-        </svg>
-      )
-    },
+
+      {
+          id: 'ZPRÁVY',
+          label: lang === "cs" ? "DOMŮ" : "HOME",
+          icon: (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+          )
+      },
     {
       id: 'POMOC',
-      label: 'POMOC',
+      label: lang === "cs" ? "POMOC" : "HELP",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10"/>
@@ -45,38 +57,26 @@ export default function BottomNavbar({ activeTab, onTabChange }: BottomNavbarPro
       )
     },
     {
-      id: 'ZPRÁVY',
-      label: 'ZPRÁVY',
+      id: 'CHAT',
+      label: lang === "cs" ? "CHAT" : "CHAT",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 11a9 9 0 0 1 9 9"/>
-          <path d="M4 4a16 16 0 0 1 16 16"/>
-          <circle cx="5" cy="19" r="1"/>
-        </svg>
-      )
-    },
-    {
-      id: 'PROFIL',
-      label: 'PROFIL',
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       )
     }
   ];
 
   return (
-    <div 
+    <div
       className="mobile-bottom-nav"
       style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '16px',
-        right: '16px',
+        position: 'fixed',
+        bottom: 'calc(12px + env(safe-area-inset-bottom))',
+        left: 'calc(12px + env(safe-area-inset-left))',
+        right: 'calc(12px + env(safe-area-inset-right))',
         height: '64px',
-        background: 'var(--bottom-nav-bg, rgba(30, 30, 30, 0.7))',
+        background: 'var(--bottom-nav-bg, rgba(var(--rgb-surface-sidebar), 0.7))',
         backdropFilter: 'blur(30px) saturate(140%)',
         WebkitBackdropFilter: 'blur(30px) saturate(140%)',
         border: '1px solid var(--glass-border)',
@@ -98,7 +98,7 @@ export default function BottomNavbar({ activeTab, onTabChange }: BottomNavbarPro
             onClick={() => onTabChange(tab.id)}
             className="scale-active-click"
             style={{ 
-              background: isActive ? 'var(--bottom-nav-active-bg, rgba(255, 255, 255, 0.06))' : 'transparent',  
+              background: isActive ? 'var(--bottom-nav-active-bg, rgba(var(--rgb-overlay), 0.06))' : 'transparent',  
               border: 'none', 
               borderRadius: '12px', 
               padding: '4px 0', 
@@ -116,13 +116,13 @@ export default function BottomNavbar({ activeTab, onTabChange }: BottomNavbarPro
             title={tab.label}
           >
             {React.cloneElement(tab.icon as React.ReactElement, {
-              stroke: isActive ? '#0A84FF' : '#8E8E93'
+              stroke: isActive ? 'var(--color-primary)' : 'var(--text-tertiary)'
             })}
-            <span style={{ 
-              fontSize: '8px', 
-              fontWeight: isActive ? '750' : '600', 
-              color: isActive ? '#0A84FF' : '#8E8E93', 
-              letterSpacing: '0.04em' 
+            <span style={{
+              fontSize: '9px',
+              fontWeight: isActive ? '750' : '600',
+              color: isActive ? 'var(--color-primary)' : 'var(--text-tertiary)',
+              letterSpacing: '0.04em'
             }}>
               {tab.label}
             </span>

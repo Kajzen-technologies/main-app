@@ -4,13 +4,24 @@ import { TabType } from './BottomNavbar';
 interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
+  lang?: "cs" | "en";
 }
 
-export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, lang = "en" }: SidebarProps) {
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
     {
+      id: 'ZPRÁVY',
+      label: lang === "cs" ? 'Hlavní stránka' : 'Home',
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      )
+    },
+    {
       id: 'MAPA',
-      label: 'Krizová Mapa',
+      label: lang === "cs" ? 'Krizová Mapa' : 'Crisis Map',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
@@ -21,7 +32,7 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     },
     {
       id: 'NÁVODY',
-      label: 'Návody a Příručky',
+      label: lang === "cs" ? 'Návody a Příručky' : 'Guides & Manuals',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -31,7 +42,7 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     },
     {
       id: 'POMOC',
-      label: 'Centrum Pomoci',
+      label: lang === "cs" ? 'Centrum Pomoci' : 'Help Center',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10"/>
@@ -44,23 +55,11 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
       )
     },
     {
-      id: 'ZPRÁVY',
-      label: 'Místní Kanály',
+      id: 'CHAT',
+      label: lang === "cs" ? 'Místní Chat' : 'Local Chat',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 11a9 9 0 0 1 9 9"/>
-          <path d="M4 4a16 16 0 0 1 16 16"/>
-          <circle cx="5" cy="19" r="1"/>
-        </svg>
-      )
-    },
-    {
-      id: 'PROFIL',
-      label: 'Krizový Profil',
-      icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       )
     }
@@ -70,8 +69,8 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     <div className="desktop-sidebar">
       {/* Brand Header */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '28px', paddingLeft: '8px' }}>
-        <span style={{ fontSize: '11px', fontWeight: '700', color: '#0A84FF', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          Nouzový Režim
+        <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--color-primary)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          {lang === "cs" ? "Nouzový Režim" : "Emergency Mode"}
         </span>
         <span style={{ fontSize: '18px', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
           RescueMesh
@@ -89,7 +88,7 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               className={`nav-item-strict ${isActive ? 'active' : ''}`}
             >
               {React.cloneElement(tab.icon as React.ReactElement, {
-                stroke: isActive ? '#0A84FF' : '#8E8E93'
+                stroke: isActive ? 'var(--color-primary)' : 'var(--text-tertiary)'
               })}
               <span>{tab.label}</span>
             </button>
@@ -100,9 +99,9 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
       {/* Connection Status Footer */}
       <div style={{ padding: '12px 8px', borderTop: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-secondary)' }}>Mesh Status</span>
-        <span style={{ fontSize: '11px', fontWeight: '600', color: '#30D158', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#30D158' }}></span>
-          Připojeno k 5 nodům
+        <span style={{ fontSize: '11px', fontWeight: '600', color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-success)' }}></span>
+          {lang === "cs" ? "Připojeno k 5 nodům" : "Connected to 5 nodes"}
         </span>
       </div>
     </div>
