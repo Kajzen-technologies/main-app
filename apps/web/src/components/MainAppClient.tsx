@@ -3535,7 +3535,7 @@ export default function MainAppClient() {
                   setAiInput("");
                   setAiSending(true);
                   try {
-                    const res = await fetch(`${API_BASE}/ai/chat`, {
+                    const res = await fetch(`/api/ai/chat`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ message })
