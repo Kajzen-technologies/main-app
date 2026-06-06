@@ -3,6 +3,5 @@
   "buildCommand": "pnpm --filter shared build && pnpm --filter web build",
   "installCommand": "pnpm install",
   "framework": "nextjs",
-  "outputDirectory": "apps/web/.next",
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- apps/web/ packages/shared/"
+  "outputDirectory": "apps/web/.next"
 }
